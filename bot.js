@@ -49,7 +49,7 @@ bot.on('message', async ctx => {
     if (ctx.updateSubTypes[0] == 'document') {
         try {
             let link = await bot.telegram.getFileLink(ctx.message.document.file_id);
-            ctx.reply('link : ' + link);
+            ctx.reply(link);
         } catch (error) {
             ctx.reply(error.description)
         }
