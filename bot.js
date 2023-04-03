@@ -45,19 +45,35 @@ bot.command('file', ctx => {
         }
     })
 });
+
 bot.on('message', async ctx => {
-    if (ctx.updateSubTypes[0] == 'document') {
+    if (ctx.update.message.document) {
         try {
-            let link = await bot.telegram.getFileLink(ctx.message.document.file_id);
+            const fileID = ctx.update.message.document.file_id;
+            const link = await bot.telegram.getFileLink(fileID);
             ctx.reply(link);
         } catch (error) {
-            ctx.reply(error.description)
+            ctx.reply(error.description);
         }
-    
-
+    } else if (ctx.update.message.photo) {
+        try {
+            const photoID = ctx.update.message.photo[0].file_id;
+            const link = await bot.telegram.getFileLink(photoID);
+            ctx.reply(link);
+        } catch (error) {
+            ctx.reply(error.description);
+        }
+    } else if (ctx.update.message.video) {
+        try {
+            const videoID = ctx.update.message.video.file_id;
+            const link = await bot.telegram.getFileLink(videoID);
+            ctx.reply(link);
+        } catch (error) {
+            ctx.reply(error.description);
+        }
     }
-
-})
+    // Add more else if clauses for other file types (audio, voice, etc.) if needed
+});
 
 bot.launch();
 // https://api.telegram.org/video/bot5933830779:AAEaLPzgeR8xXeGuv3RRWm6Yv3ZMoag7txE/video/ww.mp4
